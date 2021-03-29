@@ -14,7 +14,7 @@ var logLevel zapcore.Level
 
 func InitLogs() {
 	logLevel = zapcore.DebugLevel
-	if config.AppConfig.LogLevel == "Info" {
+	if config.LogSetting.LogLevel == "Info" {
 		logLevel = zapcore.InfoLevel
 	}
 	setLogConfig()
@@ -39,11 +39,11 @@ func setLogConfig() {
 
 	// 添加日志切割归档功能
 	hook := lumberjack.Logger{
-		Filename:   config.AppConfig.FileName,   // 日志文件路径
-		MaxSize:    config.AppConfig.MaxSize,    // 每个日志文件保存的最大尺寸 单位：M
-		MaxBackups: config.AppConfig.MaxBackups, // 日志文件最多保存多少个备份
-		MaxAge:     config.AppConfig.MaxAge,     // 文件最多保存多少天
-		Compress:   config.AppConfig.Compress,   // 是否压缩
+		Filename:   config.LogSetting.FileName,   // 日志文件路径
+		MaxSize:    config.LogSetting.MaxSize,    // 每个日志文件保存的最大尺寸 单位：M
+		MaxBackups: config.LogSetting.MaxBackups, // 日志文件最多保存多少个备份
+		MaxAge:     config.LogSetting.MaxAge,     // 文件最多保存多少天
+		Compress:   config.LogSetting.Compress,   // 是否压缩
 	}
 
 	core := zapcore.NewCore(
