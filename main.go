@@ -25,5 +25,5 @@ func main() {
 
 	registerRouter(r)
 
-	r.Run(config.AppConfig.Port)
+	_ = r.Run(config.AppConfig.Port)
 }
