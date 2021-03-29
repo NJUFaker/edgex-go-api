@@ -7,21 +7,21 @@ import (
 	"github.com/go-ini/ini"
 )
 
-var AppConfig struct {
-	LogSetting
-	MysqlSetting
-	MongoSetting
-	RedisSetting
-	ServerSetting
-}
+var (
+	ServerSetting = serverSetting{}
+	LogSetting    = logSetting{}
+	MysqlSetting  = mysqlSetting{}
+	MongoSetting  = mongoSetting{}
+	RedisSetting  = redisSetting{}
+)
 
-type ServerSetting struct {
+type serverSetting struct {
 	RunMode  string
 	HttpPort int
 	Port     string
 }
 
-type LogSetting struct {
+type logSetting struct {
 	LogLevel   string
 	FileName   string // 日志文件名
 	MaxSize    int    // 每个日志文件保存的最大尺寸 单位：M
@@ -30,30 +30,33 @@ type LogSetting struct {
 	Compress   bool   // 日志是否压缩
 }
 
-type MysqlSetting struct {
+type mysqlSetting struct {
 }
 
-type MongoSetting struct {
+type mongoSetting struct {
 }
 
-type RedisSetting struct {
+type redisSetting struct {
+	Address  string
+	Password string
+	DB       int
 }
 
-func InitAppConfig() {
+func InitConfig() {
 
 	cfg, err := ini.Load("app.ini")
 	if err != nil {
 		panic(err)
 	}
 
-	mapTo("Log", &AppConfig.LogSetting, cfg)
-	mapTo("Mongo", &AppConfig.MongoSetting, cfg)
-	mapTo("Mysql", &AppConfig.MysqlSetting, cfg)
-	mapTo("Redis", &AppConfig.RedisSetting, cfg)
-	mapTo("Server", &AppConfig.ServerSetting, cfg)
+	mapTo("Log", &LogSetting, cfg)
+	mapTo("Mongo", &MongoSetting, cfg)
+	mapTo("Mysql", &MysqlSetting, cfg)
+	mapTo("Redis", &RedisSetting, cfg)
+	mapTo("Server", &ServerSetting, cfg)
 
-	if AppConfig.HttpPort != 0 {
-		AppConfig.Port = fmt.Sprintf(":%d", AppConfig.HttpPort)
+	if ServerSetting.HttpPort != 0 {
+		ServerSetting.Port = fmt.Sprintf(":%d", ServerSetting.HttpPort)
 	}
 }
 

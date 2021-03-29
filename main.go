@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	"github.com/edgex-go-api/caller"
 	"github.com/edgex-go-api/config"
 	"github.com/edgex-go-api/logs"
 	ginzap "github.com/gin-contrib/zap"
@@ -11,13 +12,14 @@ import (
 )
 
 func init() {
-	config.InitAppConfig()
+	config.InitConfig()
 	logs.InitLogs()
+	caller.InitClient()
 }
 
 func main() {
 
-	gin.SetMode(config.AppConfig.RunMode)
+	gin.SetMode(config.ServerSetting.RunMode)
 
 	r := gin.New()
 	r.Use(ginzap.Ginzap(zap.L(), time.RFC3339, true))
@@ -25,5 +27,5 @@ func main() {
 
 	registerRouter(r)
 
-	_ = r.Run(config.AppConfig.Port)
+	_ = r.Run(config.ServerSetting.Port)
 }
