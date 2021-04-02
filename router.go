@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/edgex-go-api/caller"
+	"github.com/edgex-go-api/handler"
 	"github.com/edgex-go-api/logs"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -51,5 +52,7 @@ func registerRouter(r *gin.Engine) {
 			},
 		})
 	})
+
+	r.POST("/get_user_info", handler.GetUserInfo)
 
 }
