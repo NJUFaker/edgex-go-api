@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/edgex-go-api/resp"
+	"github.com/edgex-go-api/wrapper"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 )
@@ -14,29 +15,15 @@ type UserInfoParams struct {
 	CityName string `from:"city_name" json:"city_name"`
 }
 
-// func GetUserInfo(c *gin.Context) {
-// 	logs.Error("arrive")
-// 	var params = &UserInfoParams{}
-// 	err := binding.Default(http.MethodPost, binding.MIMEJSON).Bind(c.Request, params)
-// 	if err != nil {
-// 		c.JSON(http.StatusOK, resp.NewStdResp(resp.RESP_CODE_PARAM_ERR, nil))
-// 		return
-// 	}
-// 	params.CityName = c.Query("city_name")
-// 	c.JSON(http.StatusOK, resp.NewStdResp(resp.RESP_CODE_SUCCESS, params))
-// }
-
-func GetUserInfo(c *gin.Context) {
+func GetUserInfo(c *gin.Context) *wrapper.JsonOutput {
 	h := NewUserInfoHandler(c)
 
 	err := h.CheckParams()
 	if err != nil {
-		c.JSON(http.StatusOK, resp.NewStdResp(resp.RESP_CODE_PARAM_ERR, nil))
-		return
+		return wrapper.SampleJson(c, resp.RESP_CODE_PARAMS_ERROR, nil)
 	}
 	h.Pack()
-	c.JSON(http.StatusOK, resp.NewStdResp(resp.RESP_CODE_SUCCESS, h.Resp))
-
+	return wrapper.SampleJson(c, resp.RESP_CODE_SUCCESS, h.Resp)
 }
 
 type userInfoHandler struct {
