@@ -1,17 +1,17 @@
 package resp
 
-type CommonResponse struct {
+type StdResponse struct {
 	Prompts string      `json:"prompts"`
-	Status  int         `json:"status"`
+	Status  int32       `json:"status"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
 
-func NewStdResp(code IErrorCode, data interface{}) *CommonResponse {
-	return &CommonResponse{
-		Prompts: code.GetPrompts(),
-		Message: "",
-		Status:  0,
+func NewStdResponse(p IErrorCode, data interface{}) *StdResponse {
+	return &StdResponse{
+		Prompts: p.Prompts(),
+		Message: p.Message(),
+		Status:  p.Status(),
 		Data:    data,
 	}
 }
