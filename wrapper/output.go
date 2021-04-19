@@ -27,4 +27,6 @@ func SampleJson(c *gin.Context, p resp.ErrorCode, data interface{}) *JsonOutput 
 
 func (s *JsonOutput) Write() {
 	s.context.JSON(s.HttpStatus, s.Resp)
+	s.context.Writer.Header().Add("Content-Type", "application/json; charset=utf-8")
+	s.context.Writer.Write([]byte(s.Resp.(string)))
 }
